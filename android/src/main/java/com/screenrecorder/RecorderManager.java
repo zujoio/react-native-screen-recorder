@@ -23,16 +23,16 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import java.io.IOException;
 
-public class RNRecorderManager extends ReactContextBaseJavaModule {
+public class RecorderManager extends ReactContextBaseJavaModule {
 
-  public RNRecorderManager(ReactApplicationContext reactContext) {
+  public RecorderManager(ReactApplicationContext reactContext) {
     super(reactContext);
     this.context = (Context) reactContext;
   }
 
   @Override
   public String getName() {
-    return "RNRecorderManager";
+    return "RecorderManager";
   }
 
   private static final int REQUEST_CODE = 1000;
@@ -141,7 +141,7 @@ public class RNRecorderManager extends ReactContextBaseJavaModule {
 
   private VirtualDisplay createVirtualDisplay() {
     return mMediaProjection.createVirtualDisplay(
-      "MainActivity",
+      "RecorderManager",
       DISPLAY_WIDTH,
       DISPLAY_HEIGHT,
       mScreenDensity,
