@@ -1,11 +1,3 @@
-//
-//  RecorderManager.m
-//  screenrecord
-//
-//  Created by Chenshu on 30/5/18.
-//  Copyright © 2018 Facebook. All rights reserved.
-//
-
 #import "RecorderManager.h"
 #import <React/RCTLog.h>
 #import "ASScreenRecorder.h"
@@ -37,4 +29,3 @@ RCT_EXPORT_METHOD(stop)
   }
 }
 @end
-

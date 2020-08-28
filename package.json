@@ -1,27 +1,22 @@
 {
-  "name": "screen-recorder",
+  "name": "react-native-screen-recorder",
   "version": "0.1.0",
+  "description": "Screen recording in your React Native app",
   "private": true,
-  "devDependencies": {
-    "babel-preset-react-native-stage-0": "^1.0.1",
-    "jest": "^23.1.0",
-    "jest-react-native": "^18.0.0",
-    "react-test-renderer": "16.3.1"
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zujoio/react-native-screen-recorder"
   },
-  "scripts": {
-    "start": "react-native start",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "test": "jest"
-  },
-  "jest": {
-    "preset": "react-native"
-  },
-  "dependencies": {
-    "react": "16.3.1",
-    "react-native": "~0.55.2",
-    "react-native-fs": "^2.9.12",
-    "react-native-video": "^2.1.1",
-    "react-native-video-controls": "^2.2.1"
-  }
+  "homepage": "https://github.com/zujoio/react-native-screen-recorder.git",
+  "keywords": [
+    "react",
+    "react-native",
+    "native",
+    "screen recording",
+    "screen",
+    "record",
+    "recording"
+  ],
+  "license": "MIT"
 }
