@@ -36,7 +36,7 @@ public class RNScreenRecorder extends ReactActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RecorderManager.updateActivity(this);
+        RNScreenRecorder.updateActivity(this);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         mScreenDensity = metrics.densityDpi;
