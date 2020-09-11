@@ -1,7 +1,6 @@
 #import "RNScreenRecorder.h"
 #import <React/RCTLog.h>
 #import "ASScreenRecorder.h"
-#import "AppDelegate.h"
 @implementation RNScreenRecorder
 
 RCT_EXPORT_MODULE();
