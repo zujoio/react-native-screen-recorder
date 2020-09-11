@@ -105,8 +105,10 @@
     NSDictionary *bufferAttributes = @{(id)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA),
                                        (id)kCVPixelBufferCGBitmapContextCompatibilityKey : @YES,
                                        (id)kCVPixelBufferWidthKey : @(_viewSize.width * _scale),
-                                       (id)kCVPixelBufferHeightKey : @(_viewSize.height * _scale),
-                                       (id)kCVPixelBufferBytesPerRowAlignmentKey : @(_viewSize.width * _scale * 4)
+                                       (id)kCVPixelBufferHeightKey : @(_viewSize.height  * _scale),
+                                       (id)kCVPixelBufferBytesPerRowAlignmentKey : @(_viewSize.width * _scale * 4),
+                                       (id)kCVPixelBufferExtendedPixelsTopKey:@(80),
+                                       (id)kCVPixelBufferExtendedPixelsBottomKey:@(80)
                                        };
     
     _outputBufferPool = NULL;
