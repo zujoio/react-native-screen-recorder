@@ -16,6 +16,33 @@ RCT_EXPORT_METHOD(start)
   }
 }
 
+RCT_EXPORT_METHOD(pause)
+{
+  RCTLogInfo(@"started!");
+  ASScreenRecorder *recorder = [ASScreenRecorder sharedInstance];
+  
+  if (recorder.isPaused) {
+    [recorder pauseRecording];
+  }
+}
+
+RCT_EXPORT_METHOD(resume)
+{
+  RCTLogInfo(@"started!");
+  ASScreenRecorder *recorder = [ASScreenRecorder sharedInstance];
+  
+  if (!recorder.isPaused) {
+    [recorder resumeRecording];
+  }
+}
+
+RCT_EXPORT_METHOD(isPaused)
+{
+  RCTLogInfo(@"started!");
+  ASScreenRecorder *recorder = [ASScreenRecorder sharedInstance];
+    [recorder isPaused];
+}
+
 RCT_EXPORT_METHOD(stop)
 {
   RCTLogInfo(@"started!");
