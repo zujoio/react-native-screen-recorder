@@ -13,6 +13,7 @@ typedef void (^VideoCompletionBlock)(void);
 
 @interface ASScreenRecorder : NSObject
 @property (nonatomic, readonly) BOOL isRecording;
+@property (nonatomic, readonly) BOOL isPaused;
 
 // delegate is only required when implementing ASScreenRecorderDelegate - see below
 @property (nonatomic, weak) id <ASScreenRecorderDelegate> delegate;
@@ -23,6 +24,10 @@ typedef void (^VideoCompletionBlock)(void);
 
 + (instancetype)sharedInstance;
 - (BOOL)startRecording;
+- (BOOL)isPaused;
+- (void)pauseRecording;
+- (void)resumeRecording;
+- (void)setPaused:(BOOL)paused;
 - (void)stopRecordingWithCompletion:(VideoCompletionBlock)completionBlock;
 @end
 
