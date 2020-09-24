@@ -47,7 +47,6 @@ BOOL isStartAudio;
     
     CGSize _viewSize;
     CGFloat _scale;
-    
     CGColorSpaceRef _rgbColorSpace;
     CVPixelBufferPoolRef _outputBufferPool;
 }
@@ -116,24 +115,24 @@ BOOL isStartAudio;
 
 - (void)pauseRecording
 {
-    if (_displayLink.paused) {
-        return;
-    }
+    // if (_displayLink.paused) {
+    //     return;
+    // }
     
-    if (!self.pauseResumeTimeRanges) {
-        self.pauseResumeTimeRanges = [NSMutableArray new];
-    }
+    // if (!self.pauseResumeTimeRanges) {
+    //     self.pauseResumeTimeRanges = [NSMutableArray new];
+    // }
     
-    [self.pauseResumeTimeRanges addObject:@(_displayLink.timestamp + 0.001)]; //adding a small delay
+    // [self.pauseResumeTimeRanges addObject:@(_displayLink.timestamp + 0.001)]; //adding a small delay
     
     _displayLink.paused = YES;
 }
 
 - (void)resumeRecording
 {
-    if (_displayLink && _displayLink.isPaused) {
+    // if (_displayLink && _displayLink.isPaused) {
         _displayLink.paused = NO;
-    }
+    // }
 }
 
 - (void)stopRecordingWithCompletion:(VideoCompletionBlock)completionBlock;
@@ -142,6 +141,7 @@ BOOL isStartAudio;
         [_captureSession stopRunning];
         _isRecording = NO;
         _stopRequested = YES;
+        _displayLink.paused = NO;
         [_displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         [self completeRecordingSession:completionBlock];
         self.pauseResumeTimeRanges = nil;
@@ -169,8 +169,8 @@ BOOL isStartAudio;
                                        (id)kCVPixelBufferWidthKey : @(_viewSize.width * _scale),
                                        (id)kCVPixelBufferHeightKey : @(_viewSize.height  * _scale),
                                        (id)kCVPixelBufferBytesPerRowAlignmentKey : @(_viewSize.width * _scale * 4),
-                                       (id)kCVPixelBufferExtendedPixelsTopKey:@(40),
-                                       (id)kCVPixelBufferExtendedPixelsBottomKey:@(40)
+                                    //    (id)kCVPixelBufferExtendedPixelsTopKey:@(40),
+                                    //    (id)kCVPixelBufferExtendedPixelsBottomKey:@(40)
                                        };
     
     _outputBufferPool = NULL;
@@ -320,14 +320,22 @@ BOOL isStartAudio;
         return;
     }
     dispatch_async(_render_queue, ^{
-        if (![_videoWriterInput isReadyForMoreMediaData]) return;
+        if (![_videoWriterInput isReadyForMoreMediaData] &&  _displayLink.paused == NO) return;
         
         if (!self.firstTimeStamp) {
             self.firstTimeStamp = _displayLink.timestamp;
         }
         CFTimeInterval elapsed = (_displayLink.timestamp - self.firstTimeStamp);
+       if (self.pauseResumeTimeRanges.count) {
+            for (int i = 0; i < self.pauseResumeTimeRanges.count; i += 2) {
+                double pausedTime = [self.pauseResumeTimeRanges[i] doubleValue];
+                double resumeTime = [self.pauseResumeTimeRanges[i+1] doubleValue];
+                elapsed -= resumeTime - pausedTime;
+            }
+        }
   CMTime time = CMTimeAdd(self->_firstAudioTimeStamp, CMTimeMakeWithSeconds(elapsed, 1000));
-        
+
+        // CMTime time = CMTimeMakeWithSeconds(elapsed, 1000);  
         CVPixelBufferRef pixelBuffer = NULL;
         CGContextRef bitmapContext = [self createPixelBufferAndBitmapContext:&pixelBuffer];
         
@@ -339,7 +347,11 @@ BOOL isStartAudio;
         dispatch_sync(dispatch_get_main_queue(), ^{
             UIGraphicsPushContext(bitmapContext); {
                 for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
-                    [window drawViewHierarchyInRect:CGRectMake(0, 0, _viewSize.width, _viewSize.height) afterScreenUpdates:NO];
+                   CGRect rect = CGRectMake(0, 0, _viewSize.width, _viewSize.height);
+                    UIEdgeInsets contentInsets = UIEdgeInsetsMake(-100, 0,-101, 0);
+ 
+                    // CGRect result = UIEdgeInsetsInsetRect(rect, contentInsets);
+                    [window drawViewHierarchyInRect:UIEdgeInsetsInsetRect(rect, contentInsets) afterScreenUpdates:NO];
                 }
             } UIGraphicsPopContext();
         });
@@ -385,7 +397,7 @@ BOOL isStartAudio;
     CGContextScaleCTM(bitmapContext, _scale, _scale);
     CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, _viewSize.height);
     CGContextConcatCTM(bitmapContext, flipVertical);
-    
+
     return bitmapContext;
 }
 #pragma mark - audio recording
